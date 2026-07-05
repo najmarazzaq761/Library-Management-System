@@ -1,7 +1,6 @@
 """CLI commands for Library Management System."""
 
 import click
-from sqlalchemy.orm import Session
 from datetime import datetime
 from app.database import SessionLocal
 from app.models import Book, Member, Loan
@@ -61,8 +60,15 @@ def list_books():
         click.echo(f"\nTotal Books: {len(books)}\n")
         click.echo("-" * 80)
         for book in books:
-            status = f"Available: {book.available_copies}" if book.available_copies > 0 else "Out of stock"
-            click.echo(f"ID: {book.id} | {book.title} by {book.author} | ISBN: {book.isbn} | {status}")
+            status = (
+                f"Available: {book.available_copies}"
+                if book.available_copies > 0
+                else "Out of stock"
+            )
+            click.echo(
+                f"ID: {book.id} | {book.title} by {book.author} | "
+                f"ISBN: {book.isbn} | {status}"
+            )
         click.echo("-" * 80)
     finally:
         db.close()
@@ -86,7 +92,10 @@ def search(query):
         click.echo(f"\nFound {len(books)} book(s) matching '{query}':\n")
         click.echo("-" * 80)
         for book in books:
-            click.echo(f"ID: {book.id} | {book.title} by {book.author} | ISBN: {book.isbn}")
+            click.echo(
+                f"ID: {book.id} | {book.title} by {book.author} | "
+                f"ISBN: {book.isbn}"
+            )
         click.echo("-" * 80)
     finally:
         db.close()
@@ -106,10 +115,12 @@ def remove_book(book_id):
         # Check if book is on loan
         active_loan = db.query(Loan).filter(
             Loan.book_id == book_id,
-            Loan.is_returned == False
+            Loan.is_returned.is_(False)
         ).first()
         if active_loan:
-            click.echo(f"Cannot remove '{book.title}' - it's currently on loan!")
+            click.echo(
+                f"Cannot remove '{book.title}' - it's currently on loan!"
+            )
             return
 
         db.delete(book)
@@ -219,4 +230,4 @@ def list_members():
 
 
 if __name__ == "__main__":
-    cli()
+    cli()

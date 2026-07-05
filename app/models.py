@@ -58,4 +58,7 @@ class Loan(Base):
 
     def __repr__(self):
         status = "returned" if self.is_returned else "borrowed"
-        return f"<Loan(book='{self.book.title}', member='{self.member.name}', status='{status}')>"
+        return (
+            f"<Loan(book='{self.book.title}', "
+            f"member='{self.member.name}', status='{status}')>"
+        )

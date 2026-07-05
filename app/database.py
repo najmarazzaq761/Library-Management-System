@@ -40,11 +40,31 @@ def seed_data():
         # Check if data exists
         if db.query(Book).count() == 0:
             books = [
-                Book(title="1984", author="George Orwell", isbn="978-0451524935"),
-                Book(title="Brave New World", author="Aldous Huxley", isbn="978-0060850524"),
-                Book(title="The Hobbit", author="J.R.R. Tolkien", isbn="978-0547928227"),
-                Book(title="Pride and Prejudice", author="Jane Austen", isbn="978-0141439518"),
-                Book(title="The Great Gatsby", author="F. Scott Fitzgerald", isbn="978-0743273565"),
+                Book(
+                    title="1984",
+                    author="George Orwell",
+                    isbn="978-0451524935"
+                ),
+                Book(
+                    title="Brave New World",
+                    author="Aldous Huxley",
+                    isbn="978-0060850524"
+                ),
+                Book(
+                    title="The Hobbit",
+                    author="J.R.R. Tolkien",
+                    isbn="978-0547928227"
+                ),
+                Book(
+                    title="Pride and Prejudice",
+                    author="Jane Austen",
+                    isbn="978-0141439518"
+                ),
+                Book(
+                    title="The Great Gatsby",
+                    author="F. Scott Fitzgerald",
+                    isbn="978-0743273565"
+                ),
             ]
             for book in books:
                 db.add(book)
@@ -63,4 +83,4 @@ def seed_data():
             db.commit()
             print("Sample members added!")
     finally:
-        db.close()
+        db.close()
