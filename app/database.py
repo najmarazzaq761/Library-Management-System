@@ -3,13 +3,16 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models import Base
 
-# Get database URL from environment or use default
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:postgres@localhost:5432/library_db"
-)
+# Get database URL from environment or construct it dynamically
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    user = os.getenv("POSTGRES_USER", "postgres")
+    password = os.getenv("POSTGRES_PASSWORD", "postgres")
+    host = os.getenv("POSTGRES_HOST", "localhost")
+    db = os.getenv("POSTGRES_DB", "library_db")
+    DATABASE_URL = f"postgresql://{user}:{password}@{host}:5432/{db}"
+
 
 # Create engine
 engine = create_engine(DATABASE_URL, echo=False)
@@ -19,8 +22,18 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def init_db():
-    """Create all tables."""
-    Base.metadata.create_all(bind=engine)
+    """Create all tables via Alembic migrations."""
+    from alembic.config import Config
+    from alembic import command
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    ini_path = os.path.join(base_dir, "alembic.ini")
+
+    alembic_cfg = Config(ini_path)
+    migrations_dir = os.path.join(base_dir, "migrations")
+    alembic_cfg.set_main_option("script_location", migrations_dir)
+
+    command.upgrade(alembic_cfg, "head")
 
 
 def get_db():
