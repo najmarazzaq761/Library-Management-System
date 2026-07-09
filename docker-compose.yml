@@ -31,5 +31,23 @@ services:
     tty: true
     entrypoint: ["python", "main.py"]
 
+  api:
+    build: .
+    container_name: library_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+    entrypoint: ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
 volumes:
   postgres_data:

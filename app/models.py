@@ -32,6 +32,10 @@ class Member(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
+    hashed_password = Column(String(255), nullable=True)
+    role = Column(
+        String(50), default="member", server_default="member", nullable=False
+    )
     registered_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationship with loans
