@@ -25,6 +25,9 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 
+# Expose the API port
+EXPOSE 8000
+
 # Run the CLI app
 ENTRYPOINT ["python", "main.py"]
 CMD ["--help"]

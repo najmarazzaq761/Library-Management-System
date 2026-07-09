@@ -85,15 +85,36 @@ def seed_data():
             print("Sample books added!")
 
         if db.query(Member).count() == 0:
+            from app.auth import hash_password
             members = [
-                Member(name="Ali", email="ali@gamil.com"),
-                Member(name="Asad", email="asad@gmail.com"),
-                Member(name="Asif", email="asif@gmail.com"),
-
+                Member(
+                    name="Ali",
+                    email="ali@gamil.com",
+                    hashed_password=hash_password("password123"),
+                    role="member"
+                ),
+                Member(
+                    name="Asad",
+                    email="asad@gmail.com",
+                    hashed_password=hash_password("password123"),
+                    role="member"
+                ),
+                Member(
+                    name="Asif",
+                    email="asif@gmail.com",
+                    hashed_password=hash_password("password123"),
+                    role="member"
+                ),
+                Member(
+                    name="Librarian Jane",
+                    email="librarian@library.com",
+                    hashed_password=hash_password("librarianpass"),
+                    role="librarian"
+                ),
             ]
             for member in members:
                 db.add(member)
             db.commit()
-            print("Sample members added!")
+            print("Sample members and librarian added!")
     finally:
         db.close()
