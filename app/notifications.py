@@ -1,6 +1,13 @@
 import time
 
-def send_overdue_email(member_email: str, member_name: str, book_title: str, borrowed_at: str, days_overdue: int = 5):
+
+def send_overdue_email(
+    member_email: str,
+    member_name: str,
+    book_title: str,
+    borrowed_at: str,
+    days_overdue: int = 5
+):
     """Simulates sending an overdue warning email with network delay."""
     time.sleep(2)  # Simulate network latency of SMTP delivery
     print(f"📧 NOTIFICATION: Book '{book_title}' is overdue!")

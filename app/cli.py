@@ -4,6 +4,7 @@ from datetime import datetime
 from app.database import SessionLocal
 from app.models import Book, Member, Loan
 
+
 def add_book(title, author, isbn):
     """Add a new book to the library."""
     db = SessionLocal()
@@ -214,9 +215,9 @@ def cli():
         print("8. Return a book")
         print("9. Exit")
         print("========================================")
-        
+
         choice = input("Enter your choice (1-9): ").strip()
-        
+
         if choice == "1":
             list_books()
         elif choice == "2":
@@ -271,5 +272,6 @@ def cli():
         else:
             print("Invalid choice. Please enter a number between 1 and 9.")
 
+
 if __name__ == "__main__":
-    cli()
+    cli()
