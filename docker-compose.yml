@@ -17,7 +17,7 @@ services:
       retries: 5
 
   cli-app:
-    build: .
+    build: ./backend
     container_name: library_cli
     depends_on:
       postgres:
@@ -25,29 +25,66 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     volumes:
-      - ./app:/app/app
-      - ./data:/app/data
+      - ./backend/app:/app/app
+      - ./backend/data:/app/data
     stdin_open: true
     tty: true
     entrypoint: ["python", "main.py"]
 
   api:
-    build: .
+    build: ./backend
     container_name: library_api
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app/app
-      - ./data:/app/data
-    entrypoint: ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+      - ./backend/app:/app/app
+      - ./backend/data:/app/data
+    entrypoint: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  redis:
+    image: redis:7-alpine
+    container_name: library_redis
+    ports:
+      - "6379:6379"
+
+  celery_worker:
+    build: ./backend
+    container_name: library_celery
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/data:/app/data
+    entrypoint: ["celery", "-A", "app.celery_app.celery", "worker", "--loglevel=info"]
+
+  frontend:
+    build: ./frontend
+    container_name: library_frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
