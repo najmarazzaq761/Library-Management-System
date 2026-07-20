@@ -2,7 +2,7 @@ name: CI - Lint and Test
 
 on:
   push:
-    branches: [ "main", "staging" ]
+    branches: [ "main", "staging", "najma_*" ]
   pull_request:
     branches: [ "main", "staging" ]
 
@@ -23,10 +23,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-          curl -LsSf https://astral.sh/uv/install.sh | sh && uv pip install --system --no-cache -r requirements.txt
+          curl -LsSf https://astral.sh/uv/install.sh | sh && $HOME/.local/bin/uv pip install --system --no-cache -r backend/requirements.txt
           
       - name: Run linter
+        working-directory: backend
         run: flake8 .
         
       - name: Run tests
-        run: pytest
+        working-directory: backend
+        run: pytest
