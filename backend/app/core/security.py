@@ -40,8 +40,9 @@ def create_access_token(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     to_encode.update({"exp": expire})
+    secret = settings.JWT_SECRET_KEY or "super-secret-library-key-change-me-in-production"
     return jwt.encode(
-        to_encode, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM
+        to_encode, secret, algorithm=settings.ALGORITHM
     )
 
 
@@ -57,8 +58,9 @@ def get_current_member(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        secret = settings.JWT_SECRET_KEY or "super-secret-library-key-change-me-in-production"
         payload = jwt.decode(
-            token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token, secret, algorithms=[settings.ALGORITHM]
         )
         email: str = payload.get("sub")
         if email is None:
