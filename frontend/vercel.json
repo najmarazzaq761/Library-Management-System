@@ -1,12 +1,9 @@
 {
-    "rewrites": [
-        {
-            "source": "/api-proxy/:path*",
-            "destination": "http://${EC2_PUBLIC_IP}:8000/:path*"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ]
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
