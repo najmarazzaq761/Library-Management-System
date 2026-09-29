@@ -50,77 +50,20 @@ The application adopts a **Layered Clean Architecture** where each layer has a s
 ```text
 Library-Management-System/
 ├── .github/
-│   └── workflows/
-│       └── ci.yml               # GitHub Actions CI workflow (lint & test)
+│   └── workflows/          # CI/CD automated test & lint pipelines
 ├── backend/
 │   ├── app/
-│   │   ├── core/                # Core configurations, database engine, & security
-│   │   │   ├── config.py        # Environment variables & application settings
-│   │   │   ├── database.py      # SQLAlchemy engine, session provider, & auto-seed
-│   │   │   └── security.py      # JWT encoding/decoding, bcrypt, & route permission guards
-│   │   ├── models/              # SQLAlchemy Database Entities
-│   │   │   ├── __init__.py
-│   │   │   ├── book.py          # Book table model
-│   │   │   ├── member.py        # Member table model
-│   │   │   ├── loan.py          # Loan table model
-│   │   │   └── notification.py  # Notification table model
-│   │   ├── schemas/             # Pydantic validation & serialization models
-│   │   │   ├── __init__.py
-│   │   │   ├── book.py          # Book schemas (BookCreate, BookSchema)
-│   │   │   ├── member.py        # Member schemas (MemberCreate, MemberSchema, Token)
-│   │   │   ├── loan.py          # Loan schemas (LoanCreate, LoanDetailSchema)
-│   │   │   └── notification.py  # NotificationSchema
-│   │   ├── routers/             # FastAPI APIRouter endpoints (HTTP controllers)
-│   │   │   ├── __init__.py
-│   │   │   ├── auth.py          # /login and /signup
-│   │   │   ├── books.py         # /books and /books/search
-│   │   │   ├── loans.py         # /books/loan, /loans, and /loans/{id}/return
-│   │   │   ├── members.py       # /members
-│   │   │   └── notifications.py # /notifications and /loans/overdue/notify
-│   │   ├── services/            # Pure business logic and database operations
-│   │   │   ├── __init__.py
-│   │   │   ├── auth.py          # Authentication and user registration logic
-│   │   │   ├── books.py         # Catalog querying and book insertion
-│   │   │   ├── loans.py         # Loan transaction checks and stock mutations
-│   │   │   ├── members.py       # Member listing logic
-│   │   │   └── notifications.py # Notification retrieval and read-state mutation
-│   │   ├── celery_app.py        # Celery background tasks & Redis broker config
-│   │   ├── cli.py               # Interactive terminal CLI utility
-│   │   └── main.py              # FastAPI application bootstrap & lifespan
-│   ├── migrations/              # Alembic database migrations
-│   │   ├── versions/            # Migration revisions
-│   │   └── env.py               # Alembic database runtime environment
-│   ├── tests/                   # Backend automated testing suite
-│   │   └── testbook.py          # Book validation tests
-│   ├── alembic.ini              # Alembic migration configuration
-│   ├── Dockerfile               # Multi-stage optimized backend container
-│   ├── main.py                  # CLI runner entrypoint
-│   └── requirements.txt         # Python dependencies
-├── frontend/
-│   ├── src/
-│   │   ├── components/          # Modular React components
-│   │   │   ├── Auth.jsx         # Sign In and Sign Up modal forms
-│   │   │   ├── Catalog.jsx      # Book catalog with live search & borrow action
-│   │   │   ├── Librarian.jsx    # Librarian dashboard (Add book, Members, Task triggers)
-│   │   │   ├── Member.jsx       # Member loan history & return action
-│   │   │   └── NotificationsModal.jsx # Overdue warnings popup modal
-│   │   ├── services/            # Frontend API client & service abstraction layer
-│   │   │   ├── apiClient.js     # Centralized fetch wrapper (token injection & JSON parsing)
-│   │   │   ├── authService.js   # Auth requests
-│   │   │   ├── bookService.js   # Book catalog requests
-│   │   │   ├── loanService.js   # Loan circulation requests
-│   │   │   └── notificationService.js # Notification requests
-│   │   ├── App.jsx              # Main UI component & state orchestration
-│   │   ├── config.js            # Frontend configuration (API base URL)
-│   │   ├── index.css            # Custom CSS design system (Dark glassmorphism)
-│   │   └── main.jsx             # React DOM root entrypoint
-│   ├── Dockerfile               # Multi-stage Nginx Alpine container (~20MB)
-│   ├── package.json             # Frontend dependencies & build scripts
-│   └── vite.config.js           # Vite development server configuration
-├── .env.example                 # Template for required environment variables
-├── docker-compose.yml           # Full-stack container orchestration
-├── architecture.png             # Architecture diagram image
-└── README.md                    # Project documentation
+│   │   ├── core/           # App configuration, database setup & security
+│   │   ├── models/         # SQLAlchemy database models
+│   │   ├── schemas/        # Pydantic request/response validation schemas
+│   │   ├── routers/        # API endpoints & HTTP controllers
+│   │   └── services/       # Business logic & database operations
+│   ├── migrations/         # Alembic database migration scripts
+│   └── tests/              # Backend unit & integration tests
+└── frontend/
+    └── src/
+        ├── components/     # React UI components & views
+        └── services/       # Centralized API client & HTTP service calls
 ```
 
 ---
