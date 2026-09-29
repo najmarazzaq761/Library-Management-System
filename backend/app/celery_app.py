@@ -47,3 +47,8 @@ def create_overdue_notifications():
         db.rollback()
     finally:
         db.close()
+
+
+# Alias for compatibility
+check_and_create_overdue_notifications = create_overdue_notifications
+

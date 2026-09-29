@@ -13,9 +13,9 @@ def check_and_notify_overdue_loans(
     current_user: models.Member = Depends(require_role(["librarian"]))
 ):
     """Trigger background overdue warnings via Celery (Librarian only)."""
-    from app.celery_app import check_and_create_overdue_notifications
+    from app.celery_app import create_overdue_notifications
 
-    task = check_and_create_overdue_notifications.delay()
+    task = create_overdue_notifications.delay()
     return {
         "status": "Celery warning scanner dispatched",
         "task_id": task.id,
