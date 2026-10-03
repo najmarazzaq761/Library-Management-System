@@ -10,6 +10,9 @@ from app.core.database import get_db
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
+FALLBACK_SECRET = "super-secret-library-key-change-me-in-production"
+
+
 def hash_password(password: str) -> str:
     """Hash a plaintext password using bcrypt."""
     salt = bcrypt.gensalt()
@@ -40,7 +43,7 @@ def create_access_token(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     to_encode.update({"exp": expire})
-    secret = settings.JWT_SECRET_KEY or "super-secret-library-key-change-me-in-production"
+    secret = settings.JWT_SECRET_KEY or FALLBACK_SECRET
     return jwt.encode(
         to_encode, secret, algorithm=settings.ALGORITHM
     )
@@ -58,7 +61,7 @@ def get_current_member(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        secret = settings.JWT_SECRET_KEY or "super-secret-library-key-change-me-in-production"
+        secret = settings.JWT_SECRET_KEY or FALLBACK_SECRET
         payload = jwt.decode(
             token, secret, algorithms=[settings.ALGORITHM]
         )
