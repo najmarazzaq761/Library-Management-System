@@ -1,5 +1,8 @@
 # Library Management System
 
+### Try it Live Here: 
+https://library-management-system-kohl-six.vercel.app/
+
 A production-ready, full-stack **Library Management System** built with **FastAPI**, **PostgreSQL**, **Celery**, **Redis**, and a responsive **React (Vite)** frontend. The system follows a clean **Layered Architecture**, provides **Role-Based Access Control (RBAC)**, dispatches **asynchronous background jobs**, and is fully containerized with **Docker** and **Docker Compose**.
 
 ---
